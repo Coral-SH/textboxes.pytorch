@@ -1,8 +1,6 @@
-# SSD: Single Shot MultiBox Object Detector, in PyTorch
-A [PyTorch](http://pytorch.org/) implementation of [Single Shot MultiBox Detector](http://arxiv.org/abs/1512.02325) from the 2016 paper by Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang, and Alexander C. Berg.  The official and original Caffe code can be found [here](https://github.com/weiliu89/caffe/tree/ssd).
+# TextBoxes:A Fast Text Detector with a Single Deep Neural Network, in PyTorch
+A [PyTorch](http://pytorch.org/) re-implementation of [TextBoxes](https://arxiv.org/abs/1611.06779) from the AAAI2017 paper by Minghui Liao, Baoguang Shi, Xiang Bai, Xinggang Wang, Wenyu Liu.  The official and original Caffe code can be found [here](https://github.com/MhLiao/TextBoxes).
 
-
-<img align="right" src= "https://github.com/amdegroot/ssd.pytorch/blob/master/doc/ssd.png" height = 400/>
 
 ### Table of Contents
 - <a href='#installation'>Installation</a>
@@ -14,19 +12,15 @@ A [PyTorch](http://pytorch.org/) implementation of [Single Shot MultiBox Detecto
 - <a href='#todo'>Future Work</a>
 - <a href='#references'>Reference</a>
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
 
 ## Installation
 - Install [PyTorch](http://pytorch.org/) by selecting your environment on the website and running the appropriate command.
 - Clone this repository.
-  * Note: We currently only support Python 3+.
-  * The original repo is for PyTorch 0.3, now it support **PyTorch 1.2**
+  * Note: We currently only support Python 3+(Test on Python 3.6.8).
+  * PyTorch 0.4.1+(Test on PyTorch 1.2)
 - Then download the dataset by following the [instructions](#datasets) below.
 - We now support [tensorboardX](https://tensorboardx.readthedocs.io/en/latest/index.html) for real-time loss visualization during training!
-  * To use Visdom in the browser:
+  * To use tensorboardX in the browser:
   ```Shell
   # First install Python server and client
   pip install tensorboardX
@@ -34,98 +28,18 @@ A [PyTorch](http://pytorch.org/) implementation of [Single Shot MultiBox Detecto
   tensorboard --logdir=run/experiments_*
   ```
   * Then (during training) navigate to http://localhost:6006/ (see the Train section below for training details).
-- Note: For training, we currently support [VOC](http://host.robots.ox.ac.uk/pascal/VOC/) and [COCO](http://mscoco.org/), and aim to add [ImageNet](http://www.image-net.org/) support soon.
+- Note: For training, we currently support [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks) and [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/).
 
 ## Datasets
 To make things easy, we provide bash scripts to handle the dataset downloads and setup for you.  We also provide simple dataset loaders that inherit `torch.utils.data.Dataset`, making them fully compatible with the `torchvision.datasets` [API](http://pytorch.org/docs/torchvision/datasets.html).
 
 
-### COCO
-Microsoft COCO: Common Objects in Context
+### ICDAR2015
 
-Install `pycocotools`.
-```
-coco
-├── coco2014
-│   ├── annotations
-│   │   ├── captions_train2014.json
-│   │   ├── captions_val2014.json
-│   │   ├── instances_train2014.json
-│   │   ├── instances_val2014.json
-│   │   ├── person_keypoints_train2014.json
-│   │   └── person_keypoints_val2014.json
-│   └── images
-│       └── train2014
-└── coco2017
-    ├── annotations
-    │   ├── captions_train2017.json
-    │   ├── captions_val2017.json
-    │   ├── instances_train2017.json
-    │   ├── instances_val2017.json
-    │   ├── person_keypoints_train2017.json
-    │   ├── person_keypoints_val2017.json
-    │   ├── train_ids_2017.pth
-    │   ├── train_person_2017.pth
-    │   ├── val_ids_2017.pth
-    │   └── val_person_2017.pth
-    └── images
-        ├── test2017
-        ├── train2017
-        └── val2017
-```
+a
 
-##### Download COCO 2014
-```Shell
-# specify a directory for dataset to be downloaded into, else default is ~/data/
-sh data/scripts/COCO2014.sh
-```
 
-### VOC Dataset
-PASCAL VOC: Visual Object Classes
-
-```
-VOC
-├── VOC2007_test
-│   └── VOC2007
-│       ├── Annotations
-│       ├── ImageSets
-│       ├── JPEGImages
-│       ├── SegmentationClass
-│       └── SegmentationObject
-├── VOC2007_trainval
-│   └── VOC2007
-│       ├── Annotations
-│       ├── ImageSets
-│       ├── JPEGImages
-│       ├── SegmentationClass
-│       └── SegmentationObject
-├── VOC2008_trainval
-│   └── VOC2008
-│       ├── Annotations
-│       ├── ImageSets
-│       ├── JPEGImages
-│       ├── SegmentationClass
-│       └── SegmentationObject
-└── VOC2012_trainval
-    └── VOC2012
-        ├── Annotations
-        ├── ImageSets
-        ├── JPEGImages
-        ├── SegmentationClass
-        └── SegmentationObject
-```
-
-##### Download VOC2007 trainval & test
-```Shell
-# specify a directory for dataset to be downloaded into, else default is ~/data/
-sh data/scripts/VOC2007.sh # <directory>
-```
-
-##### Download VOC2012 trainval
-```Shell
-# specify a directory for dataset to be downloaded into, else default is ~/data/
-sh data/scripts/VOC2012.sh # <directory>
-```
+### ICDAR2017
 
 ## Training SSD
 - First download the fc-reduced [VGG-16](https://arxiv.org/abs/1409.1556) PyTorch base network weights at:              https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
@@ -162,16 +76,6 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
 
 ## Performance
 
-#### VOC2007 Test
-
-##### mAP
-
-| Original | Converted weiliu89 weights | From scratch w/o data aug | From scratch w/ data aug |
-|:-:|:-:|:-:|:-:|
-| 77.2 % | 77.26 % | 58.12% | 77.43 % |
-
-##### FPS
-**GTX 1060:** ~45.45 FPS
 
 ## Demos
 
@@ -180,13 +84,12 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
 #### Download a pre-trained network
 - We are trying to provide PyTorch `state_dicts` (dict of weight tensors) of the latest SSD model definitions trained on different datasets.  
 - Currently, we provide the following PyTorch models:
-    * SSD300 trained on VOC0712 (newest PyTorch weights)
-      - https://s3.amazonaws.com/amdegroot-models/ssd300_mAP_77.43_v2.pth
-    * SSD300 trained on VOC0712 (original Caffe weights)
-      - https://s3.amazonaws.com/amdegroot-models/ssd_300_VOC0712.pth
-- Our goal is to reproduce this table from the [original paper](http://arxiv.org/abs/1512.02325)
-<p align="left">
-<img src="http://www.cs.unc.edu/~wliu/papers/ssd_results.png" alt="SSD results on multiple datasets" width="800px"></p>
+    * SSD300 trained on IC15 (newest PyTorch weights)
+      - **TODO**
+    * SSD300 trained on IC17 (original Caffe weights)
+      - **TODO**
+- Our goal is to reproduce this table from the [original paper](https://arxiv.org/abs/1611.06779)
+
 
 ### Try the demo notebook
 - Make sure you have [jupyter notebook](http://jupyter.readthedocs.io/en/latest/install.html) installed.
@@ -218,20 +121,18 @@ jupyter notebook
 ## TODO
 We have accumulated the following to-do list, which we hope to complete in the near future
 - Still to come:
-  * [x] Support for the MS COCO dataset
+  * [ ] Support for the ICDAR dataset
+  * [ ] Support for the COCO_TEXT dataset
+  * [ ] Support for text detection evluation method
   * [ ] Support for SSD512 training and testing
   * [ ] Support for training on custom datasets
 
 ## Authors
 
-* [**Max deGroot**](https://github.com/amdegroot)
-* [**Ellis Brown**](http://github.com/ellisbrown)
+
 
 ***Note:*** Unfortunately, this is just a hobby of ours and not a full-time job, so we'll do our best to keep things up to date, but no guarantees.  That being said, thanks to everyone for your continued help and feedback as it is really appreciated. We will try to address everything as soon as possible.
 
 ## References
-- Wei Liu, et al. "SSD: Single Shot MultiBox Detector." [ECCV2016]((http://arxiv.org/abs/1512.02325)).
-- [Original Implementation (CAFFE)](https://github.com/weiliu89/caffe/tree/ssd)
-- A huge thank you to [Alex Koltun](https://github.com/alexkoltun) and his team at [Webyclip](http://www.webyclip.com) for their help in finishing the data augmentation portion.
-- A list of other great SSD ports that were sources of inspiration (especially the Chainer repo):
-  * [Chainer](https://github.com/Hakuyume/chainer-ssd), [Keras](https://github.com/rykov8/ssd_keras), [MXNet](https://github.com/zhreshold/mxnet-ssd), [Tensorflow](https://github.com/balancap/SSD-Tensorflow)
+- Minghui Liao, et al. "TextBoxes:A Fast Text Detector with a Single Deep Neural Network" [AAAI2017]((https://arxiv.org/abs/1611.06779)).
+
