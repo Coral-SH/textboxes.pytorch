@@ -1,6 +1,7 @@
 # TextBoxes:A Fast Text Detector with a Single Deep Neural Network, in PyTorch
 A [PyTorch](http://pytorch.org/) re-implementation of [TextBoxes](https://arxiv.org/abs/1611.06779) from the AAAI2017 paper by Minghui Liao, Baoguang Shi, Xiang Bai, Xinggang Wang, Wenyu Liu.  The official and original Caffe code can be found [here](https://github.com/MhLiao/TextBoxes).
 
+<img align="center" src= "./doc/textboxes_model.png" height = 400/>
 
 ### Table of Contents
 - <a href='#installation'>Installation</a>
@@ -28,22 +29,62 @@ A [PyTorch](http://pytorch.org/) re-implementation of [TextBoxes](https://arxiv.
   tensorboard --logdir=run/experiments_*
   ```
   * Then (during training) navigate to http://localhost:6006/ (see the Train section below for training details).
-- Note: For training, we currently support [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks) and [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/).
+- Note: For training, we currently support [ICDAR2013](https://rrc.cvc.uab.es/?ch=2&com=tasks#TextLocalization) [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks) and [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/).
 
 ## Datasets
 To make things easy, we provide bash scripts to handle the dataset downloads and setup for you.  We also provide simple dataset loaders that inherit `torch.utils.data.Dataset`, making them fully compatible with the `torchvision.datasets` [API](http://pytorch.org/docs/torchvision/datasets.html).
 
 
-### ICDAR2015
+### ICDAR
 
-a
+Download the ICDAR datasets from the above website and extract the files with commands like  `unzip xxx.zip -d train_images`, and you should have the following file structure.
 
+```
+ICDAR
+├── ICDAR2013
+│   ├── Challenge2_Test_Task12_Images.zip
+│   ├── Challenge2_Test_Task1_GT.zip
+│   ├── Challenge2_Training_Task12_Images.zip
+│   ├── Challenge2_Training_Task1_GT.zip
+│   ├── test_annos
+│   ├── test_images
+│   ├── train_annos
+│   └── train_images
+├── ICDAR2015
+│   ├── Challenge4_Test_Task1_GT.zip
+│   ├── ch4_test_images.zip
+│   ├── ch4_training_images.zip
+│   ├── ch4_training_localization_transcription_gt.zip
+│   ├── test_annos
+│   ├── test_images
+│   ├── train_annos
+│   └── train_images
+└── ICDAR2017
+    ├── ch9_test_images.zip
+    ├── ch9_training_images.zip
+    ├── ch9_training_localization_transcription_gt.zip
+    ├── ch9_validation_images.zip
+    ├── ch9_validation_localization_transcription_gt.zip
+    ├── test_images
+    ├── train_annos
+    ├── train_images
+    └── val_images
+```
 
-### ICDAR2017
+### COCO_Text
 
-## Training SSD
-- First download the fc-reduced [VGG-16](https://arxiv.org/abs/1409.1556) PyTorch base network weights at:              https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
-- By default, we assume you have downloaded the file in the `ssd.pytorch/weights` dir:
+```
+coco2014
+├── annotations
+│   └── COCO_Text.json
+└── images
+    └── train2014
+```
+
+## Training TextBoxes
+- First download the fc-reduced [VGG-16](https://arxiv.org/abs/1409.1556) PyTorch base network weights at:              
+  https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
+- By default, we assume you have downloaded the file in the `weights` dir
 
 ```Shell
 mkdir weights
@@ -75,7 +116,7 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
 <img align="left" src= "https://github.com/amdegroot/ssd.pytorch/blob/master/doc/detection_examples.png">
 
 ## Performance
-
+* **TODO**
 
 ## Demos
 
@@ -121,10 +162,10 @@ jupyter notebook
 ## TODO
 We have accumulated the following to-do list, which we hope to complete in the near future
 - Still to come:
-  * [ ] Support for the ICDAR dataset
-  * [ ] Support for the COCO_TEXT dataset
+  * [x] Support for the ICDAR dataset
+  * [x] Support for the COCO_TEXT dataset
   * [ ] Support for text detection evluation method
-  * [ ] Support for SSD512 training and testing
+  * [ ] Support for input size 512 training and testing
   * [ ] Support for training on custom datasets
 
 ## Authors
