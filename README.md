@@ -169,11 +169,9 @@ We have accumulated the following to-do list, which we hope to complete in the n
   * [ ] Support for training on custom datasets
 
 ## Authors
-
-
+I hope we could do this
+* [**Fantasy**](https://github.com/FantasyJXF)
+* [**Lu Zhang**](https://github.com/zhangluustb)
 
 ***Note:*** Unfortunately, this is just a hobby of ours and not a full-time job, so we'll do our best to keep things up to date, but no guarantees.  That being said, thanks to everyone for your continued help and feedback as it is really appreciated. We will try to address everything as soon as possible.
-
-## References
-- Minghui Liao, et al. "TextBoxes:A Fast Text Detector with a Single Deep Neural Network" [AAAI2017]((https://arxiv.org/abs/1611.06779)).
 
