@@ -44,8 +44,6 @@ class ICDARDataset(data.Dataset):
         (year, name) = image_sets
         imgpath = os.path.join(self.root, 'ICDAR' + year, name + '_images')
         annopath = os.path.join(self.root, 'ICDAR' + year, name + '_annos')
-        print(imgpath)
-        print(annopath)
         nof = len(glob.glob(os.path.join(imgpath, '*.jpg')))
         noa = len(glob.glob(os.path.join(annopath, '*.txt')))
         assert nof == noa
