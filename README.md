@@ -29,7 +29,7 @@ A [PyTorch](http://pytorch.org/) re-implementation of [TextBoxes](https://arxiv.
   tensorboard --logdir=run/experiments_*
   ```
   * Then (during training) navigate to http://localhost:6006/ (see the Train section below for training details).
-- Note: For training, we currently support [ICDAR2013](https://rrc.cvc.uab.es/?ch=2&com=tasks#TextLocalization) [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks) and [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/).
+- Note: For training, we currently support [ICDAR2013](https://rrc.cvc.uab.es/?ch=2&com=tasks#TextLocalization), [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks) and [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/).
 
 ## Datasets
 To make things easy, we provide bash scripts to handle the dataset downloads and setup for you.  We also provide simple dataset loaders that inherit `torch.utils.data.Dataset`, making them fully compatible with the `torchvision.datasets` [API](http://pytorch.org/docs/torchvision/datasets.html).
@@ -100,7 +100,6 @@ python train.py
 
 - Note:
   * For training, an NVIDIA GPU is strongly recommended for speed.
-  * For instructions on Visdom usage/installation, see the <a href='#installation'>Installation</a> section.
   * You can pick-up training from a checkpoint by specifying the path as one of the training parameters (again, see `train.py` for options)
 
 ## Evaluation
@@ -113,7 +112,7 @@ python eval.py
 You can specify the parameters listed in the `eval.py` file by flagging them or manually changing them.  
 
 
-<img align="left" src= "https://github.com/amdegroot/ssd.pytorch/blob/master/doc/detection_examples.png">
+<img align="left" src= "./doc/detection_example.png">
 
 ## Performance
 * **TODO**
