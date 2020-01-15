@@ -29,7 +29,7 @@ A [PyTorch](http://pytorch.org/) re-implementation of [TextBoxes](https://arxiv.
   tensorboard --logdir=run/experiments_*
   ```
   * Then (during training) navigate to http://localhost:6006/ (see the Train section below for training details).
-- Note: For training, we currently support [ICDAR2013](https://rrc.cvc.uab.es/?ch=2&com=tasks#TextLocalization), [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks) and [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/).
+- Note: For training, we currently support [ICDAR2013](https://rrc.cvc.uab.es/?ch=2&com=tasks#TextLocalization), [ICDAR2015](https://rrc.cvc.uab.es/?ch=4&com=tasks#TextLocalization), [ICDAR2017](https://rrc.cvc.uab.es/?ch=9&com=tasks), [COCO_TEXT](https://vision.cornell.edu/se3/coco-text-2/) and [SynthText](http://www.robots.ox.ac.uk/~vgg/data/scenetext/).
 
 ## Datasets
 To make things easy, we provide bash scripts to handle the dataset downloads and setup for you.  We also provide simple dataset loaders that inherit `torch.utils.data.Dataset`, making them fully compatible with the `torchvision.datasets` [API](http://pytorch.org/docs/torchvision/datasets.html).
@@ -81,6 +81,13 @@ coco2014
     └── train2014
 ```
 
+### SynthText
+
+This is a synthetically generated dataset, in which word instances are placed in natural scene images, while taking into account the scene layout.
+
+The dataset consists of 800 thousand images with approximately 8 million synthetic word instances. Each text instance is annotated with its text-string, word-level and character-level bounding-boxes.
+
+
 ## Training TextBoxes
 - First download the fc-reduced [VGG-16](https://arxiv.org/abs/1409.1556) PyTorch base network weights at:              
   https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
@@ -124,9 +131,9 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
 #### Download a pre-trained network
 - We are trying to provide PyTorch `state_dicts` (dict of weight tensors) of the latest SSD model definitions trained on different datasets.  
 - Currently, we provide the following PyTorch models:
-    * SSD300 trained on IC15 (newest PyTorch weights)
+    * SSD300 trained on TextBoxes (newest PyTorch weights)
       - **TODO**
-    * SSD300 trained on IC17 (original Caffe weights)
+    * SSD300 trained on COCO_Text (newest PyTorch weights)
       - **TODO**
 - Our goal is to reproduce this table from the [original paper](https://arxiv.org/abs/1611.06779)
 
@@ -166,6 +173,7 @@ We have accumulated the following to-do list, which we hope to complete in the n
   * [ ] Support for text detection evluation method
   * [ ] Support for input size 512 training and testing
   * [ ] Support for training on custom datasets
+  * [ ] Support for MobileNetV2 backbone
 
 ## Authors
 I hope we could do this

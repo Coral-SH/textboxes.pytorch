@@ -1,5 +1,6 @@
 from .icdar import ICDAR_ROOT, ICDARDataset
 from .coco_text import COCO_ROOT, COCOTEXTDataset
+from .synth_text import SynthText_ROOT, SynthTextDataset
 from .config import *
 import torch
 import cv2

@@ -55,7 +55,7 @@ class ICDARDataset(data.Dataset):
         
     def __getitem__(self, index):       
         index = index + 1
-        img = cv.imread(self._imgpath % index, cv.IMREAD_ANYCOLOR)
+        img = cv.imread(self._imgpath % index)
         height, width = img.shape[:2]
         # img = Image.open(self._imgpath % index).convert('RGB')
         # width, height = img.size
