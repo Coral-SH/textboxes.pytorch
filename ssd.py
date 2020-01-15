@@ -149,6 +149,8 @@ def vgg(cfg, i, batch_norm=False):
 
 def add_extras(cfg, i, batch_norm=False):
     # Extra layers added to VGG for feature scaling
+    # Normal operation is (k1s1p0) conv then (k3s2p1) conv. 
+    # Second conv 'S' for down scale FM size
     layers = []
     in_channels = i
     flag = False
@@ -167,17 +169,25 @@ def add_extras(cfg, i, batch_norm=False):
 def multibox(vgg, extra_layers, cfg, num_classes):
     loc_layers = []
     conf_layers = []
-    vgg_source = [21, -2]
+    # In VGG model Sequential 
+    # vgg[21] = conv4_3 = Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    # vgg[-2] = vgg[33] = FC7 = conv7 = Conv2d(1024, 1024, kernel_size=(1, 1), stride=(1, 1))
+    vgg_source = [21, -2] 
     for k, v in enumerate(vgg_source):
         loc_layers += [nn.Conv2d(vgg[v].out_channels,
-                                 cfg[k] * 4, kernel_size=3, padding=1)]
+                                 cfg[k] * 4, kernel_size=(1,5), padding=(0,2))]
         conf_layers += [nn.Conv2d(vgg[v].out_channels,
-                        cfg[k] * num_classes, kernel_size=3, padding=1)]
+                        cfg[k] * num_classes, kernel_size=(1,5), padding=(0,2))]
+    # In Extra model Sequential 
+    # extra[1] = conv8_2 = Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    # extra[3] = conv9_2 = Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    # extra[5] = conv10_2 = Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1))
+    # extra[7] = global = Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1))
     for k, v in enumerate(extra_layers[1::2], 2):
         loc_layers += [nn.Conv2d(v.out_channels, cfg[k]
-                                 * 4, kernel_size=3, padding=1)]
+                                 * 4, kernel_size=(1,5), padding=(0,2))]
         conf_layers += [nn.Conv2d(v.out_channels, cfg[k]
-                                  * num_classes, kernel_size=3, padding=1)]
+                                  * num_classes, kernel_size=(1,5), padding=(0,2))]
     return vgg, extra_layers, (loc_layers, conf_layers)
 
 
@@ -191,12 +201,12 @@ extras = {
     '512': [],
 }
 mbox = {
-    '300': [4, 6, 6, 6, 4, 4],  # number of boxes per feature map location
+    '300': [14, 14, 14, 14, 14, 14],  # number of boxes per feature map location
     '512': [],
 }
 
 
-def build_ssd(phase, size=300, num_classes=21):
+def build_ssd(phase, size=300, num_classes=2):
     if phase != "test" and phase != "train":
         print("ERROR: Phase: " + phase + " not recognized")
         return
