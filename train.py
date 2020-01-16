@@ -1,5 +1,6 @@
 from data import *
 from utils.augmentations import SSDAugmentation
+from utils.utils import *
 from layers.modules import MultiBoxLoss
 from ssd import build_ssd
 import os
@@ -24,8 +25,8 @@ parser = argparse.ArgumentParser(
 train_set = parser.add_mutually_exclusive_group()
 parser.add_argument('--dataset', default='ICDAR', choices=['ICDAR', 'COCO_TEXT'],
                     type=str, help='ICDAR or COCO_TEXT')
-parser.add_argument('--dataset_root', default=ICDAR_ROOT,
-                    help='Dataset root directory path')
+# parser.add_argument('--dataset_root', default=ICDAR_ROOT,
+#                     help='Dataset root directory path')
 parser.add_argument('--basenet', default='vgg16_reducedfc.pth',
                     help='Pretrained base model')
 parser.add_argument('--batch_size', default=32, type=int,
@@ -46,8 +47,6 @@ parser.add_argument('--weight_decay', default=5e-4, type=float,
                     help='Weight decay for SGD')
 parser.add_argument('--gamma', default=0.1, type=float,
                     help='Gamma update for SGD')
-parser.add_argument('--visdom', default=False, type=str2bool,
-                    help='Use visdom for loss visualization')
 parser.add_argument('--save_folder', default='weights/',
                     help='Directory for saving checkpoint models')
 args = parser.parse_args()
@@ -70,13 +69,11 @@ if not os.path.exists(args.save_folder):
 def train():
     cfg = cfg300
     if args.dataset == 'ICDAR':
-        args.dataset_root = ICDAR_ROOT
-        dataset = ICDARDataset(root=args.dataset_root,
+        dataset = ICDARDataset(root=ICDAR_ROOT,
                                transform=SSDAugmentation(cfg['min_dim'],
                                                          MEANS))  
     elif args.dataset == 'COCO_TEXT':
-        args.dataset_root = COCO_ROOT
-        dataset = COCOTEXTDataset(root=args.dataset_root,
+        dataset = COCOTEXTDataset(root=COCO_ROOT,
                                transform=SSDAugmentation(cfg['min_dim'],
                                                          MEANS)) 
         
@@ -130,7 +127,8 @@ def train():
     print('Epoch size is ', epoch_size)
     print('Using the specified args:')
     print(args)
-
+    save_experiment_config(args, experiment_dir)
+        
     step_index = 0
 
     data_loader = data.DataLoader(dataset, args.batch_size,
