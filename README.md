@@ -99,7 +99,7 @@ cd weights
 wget https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
 ```
 
-- To train SSD using the train script simply specify the parameters listed in `train.py` as a flag or manually change them.
+- To train TextBoxes using the train script simply specify the parameters listed in `train.py` as a flag or manually change them.
 
 ```Shell
 python train.py
@@ -126,14 +126,14 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
 
 ## Demos
 
-### Use a pre-trained SSD network for detection
+### Use a pre-trained TextBoxes network for detection
 
 #### Download a pre-trained network
-- We are trying to provide PyTorch `state_dicts` (dict of weight tensors) of the latest SSD model definitions trained on different datasets.  
+- We are trying to provide PyTorch `state_dicts` (dict of weight tensors) of the latest TextBoxes model definitions trained on different datasets.  
 - Currently, we provide the following PyTorch models:
-    * SSD300 trained on TextBoxes (newest PyTorch weights)
+    * TextBoxes300 trained on SynthText (newest PyTorch weights)
       - **TODO**
-    * SSD300 trained on COCO_Text (newest PyTorch weights)
+    * TextBoxes300 trained on COCO_Text (newest PyTorch weights)
       - **TODO**
 - Our goal is to reproduce this table from the [original paper](https://arxiv.org/abs/1611.06779)
 

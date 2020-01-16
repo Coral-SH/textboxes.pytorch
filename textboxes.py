@@ -6,7 +6,7 @@ from data import cfg300
 import os
 
 
-class SSD(nn.Module):
+class TextBoxes(nn.Module):
     """Single Shot Multibox Architecture
     The network is composed of a base VGG network followed by the
     added multibox conv layers.  Each multibox layer branches into
@@ -25,7 +25,7 @@ class SSD(nn.Module):
     """
 
     def __init__(self, phase, size, base, extras, head, num_classes):
-        super(SSD, self).__init__()
+        super(TextBoxes, self).__init__()
         self.phase = phase
         self.num_classes = num_classes
         self.cfg = cfg300
@@ -35,7 +35,7 @@ class SSD(nn.Module):
             self.priors = self.priorbox.forward()
         self.size = size
 
-        # SSD network
+        # TextBoxes network
         self.vgg = nn.ModuleList(base)
         # Layer learns to scale the l2 normalized features from conv4_3
         self.L2Norm = L2Norm(512, 20)
@@ -206,15 +206,15 @@ mbox = {
 }
 
 
-def build_ssd(phase, size=300, num_classes=2):
+def build_textboxes(phase, size=300, num_classes=2):
     if phase != "test" and phase != "train":
         print("ERROR: Phase: " + phase + " not recognized")
         return
     if size != 300:
         print("ERROR: You specified size " + repr(size) + ". However, " +
-              "currently only SSD300 (size=300) is supported!")
+              "currently only TextBoxes300 (size=300) is supported!")
         return
     base_, extras_, head_ = multibox(vgg(base[str(size)], 3),
                                      add_extras(extras[str(size)], 1024),
                                      mbox[str(size)], num_classes)
-    return SSD(phase, size, base_, extras_, head_, num_classes)
+    return TextBoxes(phase, size, base_, extras_, head_, num_classes)

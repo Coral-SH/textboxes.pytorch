@@ -1,1 +1,1 @@
-from .augmentations import SSDAugmentation
+from .augmentations import TextBoxesAugmentation

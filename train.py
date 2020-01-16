@@ -1,8 +1,8 @@
 from data import *
-from utils.augmentations import SSDAugmentation
+from utils.augmentations import TextBoxesAugmentation
 from utils.utils import *
 from layers.modules import MultiBoxLoss
-from ssd import build_ssd
+from textboxes import build_textboxes
 import os
 import sys
 import time
@@ -70,15 +70,15 @@ def train():
     cfg = cfg300
     if args.dataset == 'ICDAR':
         dataset = ICDARDataset(root=ICDAR_ROOT,
-                               transform=SSDAugmentation(cfg['min_dim'],
+                               transform=TextBoxesAugmentation(cfg['min_dim'],
                                                          MEANS))  
     elif args.dataset == 'COCO_TEXT':
         dataset = COCOTEXTDataset(root=COCO_ROOT,
-                               transform=SSDAugmentation(cfg['min_dim'],
+                               transform=TextBoxesAugmentation(cfg['min_dim'],
                                                          MEANS)) 
     elif args.dataset == 'SynthText':
         dataset = SynthTextDataset(root=SynthText_ROOT,
-                               transform=SSDAugmentation(cfg['min_dim'],
+                               transform=TextBoxesAugmentation(cfg['min_dim'],
                                                          MEANS)) 
         
     directory = os.path.join('run', args.dataset)
@@ -87,22 +87,22 @@ def train():
     experiment_dir = os.path.join(directory, 'experiment_{}'.format(str(run_id)))
     if not os.path.exists(experiment_dir):
         os.makedirs(experiment_dir)
-    writer = SummaryWriter(log_dir=experiment_dir)
+    writer = SummaryWriter(logdir=experiment_dir)
     
-    ssd_net = build_ssd('train', cfg['min_dim'], cfg['num_classes'])
-    net = ssd_net
+    textboxes_net = build_textboxes('train', cfg['min_dim'], cfg['num_classes'])
+    net = textboxes_net
 
     if args.cuda:
-        net = torch.nn.DataParallel(ssd_net)
+        net = torch.nn.DataParallel(textboxes_net)
         cudnn.benchmark = True
 
     if args.resume:
         print('Resuming training, loading {}...'.format(args.resume))
-        ssd_net.load_weights(args.resume)
+        textboxes_net.load_weights(args.resume)
     else:
         vgg_weights = torch.load(args.save_folder + args.basenet)
         print('Loading base network...')
-        ssd_net.vgg.load_state_dict(vgg_weights)
+        textboxes_net.vgg.load_state_dict(vgg_weights)
 
     if args.cuda:
         net = net.cuda()
@@ -110,9 +110,9 @@ def train():
     if not args.resume:
         print('Initializing weights...')
         # initialize newly added layers' weights with xavier method
-        ssd_net.extras.apply(weights_init)
-        ssd_net.loc.apply(weights_init)
-        ssd_net.conf.apply(weights_init)
+        textboxes_net.extras.apply(weights_init)
+        textboxes_net.loc.apply(weights_init)
+        textboxes_net.conf.apply(weights_init)
 
     optimizer = optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum,
                           weight_decay=args.weight_decay)
@@ -127,7 +127,7 @@ def train():
     print('Loading the dataset...')
 
     epoch_size = len(dataset) // args.batch_size
-    print('Training SSD on:', dataset.name)
+    print('Training TextBoxes on:', dataset.name)
     print('Epoch size is ', epoch_size)
     print('Using the specified args:')
     print(args)
@@ -186,10 +186,10 @@ def train():
             
         if iteration != 0 and iteration % 5000 == 0:
             print('Saving state, iter:', iteration)
-            torch.save(ssd_net.state_dict(), 
-                       '{}/ssd{}_{}_'.format(experiment_dir, cfg['min_dim'], args.dataset) +
+            torch.save(textboxes_net.state_dict(), 
+                       '{}/textboxes{}_{}_'.format(experiment_dir, cfg['min_dim'], args.dataset) +
                        repr(iteration) + '.pth')
-    torch.save(ssd_net.state_dict(), os.path.join(experiment_dir, args.dataset + '.pth'))
+    torch.save(textboxes_net.state_dict(), os.path.join(experiment_dir, args.dataset + '.pth'))
 
 
 def adjust_learning_rate(optimizer, gamma, step):

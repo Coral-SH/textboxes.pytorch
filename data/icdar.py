@@ -14,7 +14,7 @@ import cv2 as cv
 import numpy as np
 
 # note: if you used our download scripts, this should be right
-ICDAR_ROOT = "/home/Datasets/TextDet/ICDAR/"
+ICDAR_ROOT = "/Users/jingxiaofei/Documents/Datasets/TextDet/ICDAR/"
 
 
 class ICDARDataset(data.Dataset):

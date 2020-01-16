@@ -7,7 +7,7 @@ from ..box_utils import match, log_sum_exp
 
 
 class MultiBoxLoss(nn.Module):
-    """SSD Weighted Loss Function
+    """TextBoxes Weighted Loss Function
     Compute Targets:
         1) Produce Confidence Target Indices by matching  ground truth boxes
            with (default) 'priorboxes' that have jaccard index > threshold parameter
@@ -48,7 +48,7 @@ class MultiBoxLoss(nn.Module):
         """Multibox Loss
         Args:
             predictions (tuple): A tuple containing loc preds, conf preds,
-            and prior boxes from SSD net.
+            and prior boxes from TextBoxes net.
                 conf shape: torch.size(batch_size,num_priors,num_classes)
                 loc shape: torch.size(batch_size,num_priors,4)
                 priors shape: torch.size(num_priors,4)
