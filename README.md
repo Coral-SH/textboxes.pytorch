@@ -180,5 +180,8 @@ I hope we could do this
 * [**Fantasy**](https://github.com/FantasyJXF)
 * [**Lu Zhang**](https://github.com/zhangluustb)
 
+## Acknowledgements
+This repo is modified from [ss.pytorch](https://github.com/amdegroot/ssd.pytorch).
+
 ***Note:*** Unfortunately, this is just a hobby of ours and not a full-time job, so we'll do our best to keep things up to date, but no guarantees.  That being said, thanks to everyone for your continued help and feedback as it is really appreciated. We will try to address everything as soon as possible.
 

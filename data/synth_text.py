@@ -81,8 +81,8 @@ class SynthTextDataset(data.Dataset):
     
 def MatRead(matfile):
     data = sio.loadmat(matfile)
-    train_file = open(os.path.join(ROOT, 'train.txt'), 'w')
-    test_file = open(os.path.join(ROOT, 'test.txt'), 'w')
+    train_file = open(os.path.join(SynthText_ROOT, 'train.txt'), 'w')
+    test_file = open(os.path.join(SynthText_ROOT, 'test.txt'), 'w')
     
     for i in range(len(data['txt'][0])):
         contents = []
@@ -141,8 +141,8 @@ def MatRead(matfile):
         doc.writexml(fp, indent='\t', addindent='\t', newl='\n', encoding="utf-8")
         fp.close()
         rad = random.uniform(10,20)
-        img_path = os.path.join(ROOT, data['imnames'][0][i][0])
-        xml_path = os.path.join(ROOT, filename)
+        img_path = os.path.join(SynthText_ROOT, data['imnames'][0][i][0])
+        xml_path = os.path.join(SynthText_ROOT, filename)
         file_line = img_path + " " + xml_path + '\n'
         if rad > 18:
             test_file.write(file_line)
@@ -155,4 +155,4 @@ def MatRead(matfile):
 if __name__ == '__main__':
     # preprocess the SynthText dataset to get train/test subset
     # and save the annotation of each image
-    MatRead(os.path.join(SynText_ROOT, 'gt.mat'))
+    MatRead(os.path.join(SynthText_ROOT, 'gt.mat'))
