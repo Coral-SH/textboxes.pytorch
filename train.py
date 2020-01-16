@@ -16,6 +16,8 @@ from tensorboardX import SummaryWriter
 import numpy as np
 import argparse
 import ipdb
+
+
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
 
@@ -23,10 +25,8 @@ def str2bool(v):
 parser = argparse.ArgumentParser(
     description='Single Shot MultiBox Detector Training With Pytorch')
 train_set = parser.add_mutually_exclusive_group()
-parser.add_argument('--dataset', default='ICDAR', choices=['ICDAR', 'COCO_TEXT'],
-                    type=str, help='ICDAR or COCO_TEXT')
-# parser.add_argument('--dataset_root', default=ICDAR_ROOT,
-#                     help='Dataset root directory path')
+parser.add_argument('--dataset', default='ICDAR', choices=['ICDAR', 'COCO_TEXT', 'SynthText'],
+                    type=str, help='ICDAR, COCO_TEXT or SynthText')
 parser.add_argument('--basenet', default='vgg16_reducedfc.pth',
                     help='Pretrained base model')
 parser.add_argument('--batch_size', default=32, type=int,
@@ -65,7 +65,7 @@ else:
 if not os.path.exists(args.save_folder):
     os.mkdir(args.save_folder)
 
-
+    
 def train():
     cfg = cfg300
     if args.dataset == 'ICDAR':
@@ -74,6 +74,10 @@ def train():
                                                          MEANS))  
     elif args.dataset == 'COCO_TEXT':
         dataset = COCOTEXTDataset(root=COCO_ROOT,
+                               transform=SSDAugmentation(cfg['min_dim'],
+                                                         MEANS)) 
+    elif args.dataset == 'SynthText':
+        dataset = SynthTextDataset(root=SynthText_ROOT,
                                transform=SSDAugmentation(cfg['min_dim'],
                                                          MEANS)) 
         
